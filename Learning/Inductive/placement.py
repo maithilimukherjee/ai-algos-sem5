@@ -1,5 +1,4 @@
-from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
-import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier, export_text
 
 # define training data with augmented samples
 # features: [placed, package_above_6lpa, gate_qualified]
@@ -21,6 +20,7 @@ model.fit(X_new, y_new)
 # Test the original student
 student = [[1, 0, 1]]  # placed, package <6l, gate qualified
 prediction = model.predict(student)
+print("Placement Prediction Results:")
 
 class_names=['offcampus/GATE/abroad', 'higher studies', 'stay in job']
 print(f"Prediction for {student}: {class_names[prediction[0]]}")
@@ -28,3 +28,10 @@ print("\nDecision Tree Rules:")
 r = export_text(model, feature_names=['placed', 'package_above_6lpa', 'gate_qualified'], class_names=class_names)
 print(r)
 
+failed_student = [[0, 0, 0]]  # not placed, package<6l, not gate qualified
+failed_prediction = model.predict(failed_student)
+print(f"Prediction for {failed_student}: {class_names[failed_prediction[0]]}")
+
+newStudent = [[1, 1, 0]]  # placed, package>6l, gate qualified
+new_prediction = model.predict(newStudent)
+print(f"Prediction for {newStudent}: {class_names[new_prediction[0]]}")
