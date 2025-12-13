@@ -22,23 +22,6 @@ Table of contents
 Overview
 This repository is organized to separate conceptual notebooks and polished algorithm implementations. Notebooks are used for interactive exploration and visual explanation; scripts and modules contain reusable implementations suitable for assignments and integration into larger projects.
 
-Repository structure (suggested)
-- README.md — this file
-- requirements.txt — Python dependencies
-- environment.yml — optional Conda environment
-- notebooks/ — Jupyter notebooks used for teaching, demos and experiments
-- algorithms/ — library-style implementations (Python packages/modules)
-  - search/
-  - optimization/
-  - probabilistic_models/
-  - ml/  (classical ML algorithms)
-  - deep_learning/ (if applicable)
-- assignments/ — assignment statements, starter code and solutions (if included)
-- data/ — small datasets, or scripts that download datasets
-- examples/ — runnable example scripts demonstrating usage
-- tests/ — unit tests and test data
-- docs/ — additional notes, lecture slides, or generated docs
-
 Languages & tools
 - Primary: Python (>=3.8 recommended)
 - Jupyter / JupyterLab for notebooks
