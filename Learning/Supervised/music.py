@@ -1,4 +1,6 @@
 from sklearn.linear_model import LogisticRegression
+from matplotlib import pyplot as plt
+import numpy as np
 
 #input features: pop score, rnb score
 X = [
@@ -65,3 +67,37 @@ for song in recommendations:
 #the model learns from labeled user data
 #predictions are made for a new user
 #recommendations are generated based on predicted preference
+
+# convert data to numpy arrays
+X_np = np.array(X)
+y_np = np.array(y)
+
+# scatter plot of training data
+plt.scatter(X_np[y_np == 1][:, 0], X_np[y_np == 1][:, 1], label="pop listeners")
+plt.scatter(X_np[y_np == 0][:, 0], X_np[y_np == 0][:, 1], label="rnb listeners")
+
+# plot your point
+plt.scatter(you[0][0], you[0][1], marker='x', s=100, label="you")
+
+# decision boundary
+w1, w2 = model.coef_[0]
+b = model.intercept_[0]
+
+x_values = np.linspace(0, 10, 100)
+y_values = -(w1 * x_values + b) / w2
+
+plt.plot(x_values, y_values, linestyle='--', label="decision boundary")
+
+# labels and legend
+plt.xlabel("pop score")
+plt.ylabel("rnb score")
+plt.title("music preference classification using logistic regression")
+plt.legend()
+plt.grid(True)
+
+plt.show()
+
+# how to read this graph
+#dots clustered near high pop, low rnb → pop class
+#dots clustered near low pop, high rnb → rnb class
+#the dashed line is where the model is 50–50 unsure
