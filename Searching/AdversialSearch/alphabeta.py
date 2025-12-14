@@ -1,57 +1,67 @@
 import math
 
-# game tree with explicit leaf labels
-GAME_TREE = [
-    [   # b (min)
-        [('m', 6), ('n', 4)],
-        [('o', 2), ('p', 0)],
-        [('q', 7), ('r', 3)]
-    ],
-    [   # c (min)
-        [('s', 8), ('t', 2)],
-        [('u', 4), ('v', 9)],
-        [('w', 0), ('x', 5)]
-    ],
-    [   # d (min)
-        [('y', 1), ('z', 7)],
-        [('z1', 3), ('z2', 0)]
-    ]
-]
+# ---------- USER INPUT ----------
+num_min_nodes = int(input("enter number of min nodes (children of root): "))
 
+GAME_TREE = []
+
+for i in range(num_min_nodes):
+    print(f"\nmin node {i+1}:")
+    num_max_nodes = int(input("enter number of max nodes under this min node: "))
+    min_node = []
+
+    for j in range(num_max_nodes):
+        leaf_input = input(
+            f"enter leaf label-value pairs for max node {j+1} (e.g. m 6 n 4): "
+        )
+        tokens = leaf_input.split()
+        leaf_list = []
+
+        for k in range(0, len(tokens), 2):
+            label = tokens[k]
+            value = int(tokens[k + 1])
+            leaf_list.append((label, value))
+
+        min_node.append(leaf_list)
+
+    GAME_TREE.append(min_node)
+
+# ---------- ALPHA BETA ----------
 pruned_nodes = []
 
 def alpha_beta(node, alpha, beta, maximizing):
-    # leaf node
+    # leaf
     if isinstance(node, tuple):
-        label, value = node
-        return value
+        return node[1]
 
     if maximizing:
         value = -math.inf
         for i, child in enumerate(node):
-            value = max(value, alpha_beta(child, alpha, beta, False))
+            child_value = alpha_beta(child, alpha, beta, False)
+            value = max(value, child_value)
             alpha = max(alpha, value)
 
-            # prune only if unexplored children exist
+            # real pruning only if siblings exist
             if beta <= alpha and i < len(node) - 1:
-                # only happens at g → r
-                pruned_nodes.append('r')
+                # children here are LEAVES
+                for skipped_leaf in node[i+1:]:
+                    pruned_nodes.append(skipped_leaf[0])
                 break
         return value
 
-    else:  # minimizing player
+    else:
         value = math.inf
         for i, child in enumerate(node):
-            value = min(value, alpha_beta(child, alpha, beta, True))
+            child_value = alpha_beta(child, alpha, beta, True)
+            value = min(value, child_value)
             beta = min(beta, value)
 
-            # prune only if unexplored children exist
-            if beta <= alpha and i < len(node) - 1:
+            if beta <= alpha:
                 break
         return value
 
-# run
+# ---------- RUN ----------
 result = alpha_beta(GAME_TREE, -math.inf, math.inf, True)
 
-print("final optimal value at root:", result)
+print("\nfinal optimal value at root:", result)
 print("pruned nodes:", pruned_nodes)
